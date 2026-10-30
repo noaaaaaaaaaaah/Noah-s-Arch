@@ -1,5 +1,5 @@
-#!/bin/bash
-#Rofi MPC Client with both fuzzy and sorted search
+#!/usr/bin/env bash
+
 FOLDER=$HOME/Public/Music
 
 name () { \
@@ -11,10 +11,11 @@ sorted () { \
   ARTIST="$(echo "$(command ls $FOLDER)" | rofi -dmenu -i -p "Artiste" -lines 15)" || exit 0
   ALBUM="$(echo "$(command ls "$FOLDER"/"$ARTIST"/"")" | rofi -dmenu -p "$ARTIST" -i -l 15)" || exit 0
   CHOICE=$(
-	echo "Play|$(find "$FOLDER"/"$ARTIST"/"$ALBUM"/"" -type f -printf '%P|' | cut -d'|' -f2- | sort -n)" | rofi -sep "|" -dmenu -i -p "Play mode" -lines 15
+	echo "Back|Play|$(find "$FOLDER"/"$ARTIST"/"$ALBUM"/"" -type f -printf '%P|' | cut -d'|' -f2- | sort -n)" | rofi -sep "|" -dmenu -i -p "Play mode" -lines 15
   )
   case $CHOICE in
 	"") exit 0 ;;
+	Back) sorted ;;
 	Play) mpc add "$FOLDER"/"$ARTIST"/"$ALBUM"; mpc play ;;
 	*) mpc add "$FOLDER"/"$ARTIST"/"$ALBUM"/"$CHOICE"; mpc play >/dev/null 2>&1  ;;
   esac

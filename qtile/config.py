@@ -68,8 +68,8 @@ keys = [
     
     #user defined
     Key([mod], "i", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
-    Key([mod], "o", lazy.spawn("rofi -show run"), desc="Launch Rofi Run"),
-    Key([mod, "control"], "o", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
+    Key([mod], "o", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
+    Key([mod, "control"], "o", lazy.spawn("rofi -show run"), desc="Launch Rofi Run"),
     Key([mod], "m", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
