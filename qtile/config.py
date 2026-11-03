@@ -1,19 +1,19 @@
 import os
 from os import path
 from collections.abc import Callable
-
 import libqtile.resources
 from libqtile import bar, layout, qtile, widget, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Output, Screen
+from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Output, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-
 import json
 import subprocess
+from libqtile.dgroups import simple_key_binder
 
 qtile_path = path.join(path.expanduser('~'), ".config", "qtile")
-
+bg = path.join(qtile_path, "bg_main.jpg")
 theme_file = path.join(qtile_path, "themes", "noahs-arch.json")
+
 with open(theme_file, "r") as f:
     colors = json.load(f)
 
@@ -26,6 +26,7 @@ def autostart():
 mod = "mod4"
 terminal = guess_terminal()
 
+##BINDINGS
 keys = [
 
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -66,6 +67,24 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     
+    ##CHORD
+    KeyChord([mod, "Shift"], "a", [
+        Key([], "a", lazy.group["a"].toscreen()),
+        Key([], "z", lazy.group["z"].toscreen()),
+        Key([], "e", lazy.group["e"].toscreen()),
+        Key([], "r", lazy.group["r"].toscreen()),
+        Key([], "t", lazy.group["t"].toscreen()),
+        
+        Key(["Shift"], "a", lazy.window.togroup("a")),
+        Key(["Shift"], "z", lazy.window.togroup("z")),
+        Key(["Shift"], "e", lazy.window.togroup("e")),
+        Key(["Shift"], "r", lazy.window.togroup("r")),
+        Key(["Shift"], "t", lazy.window.togroup("t")),
+        ],
+        mode=True,
+        name="Group navigation"
+    ),
+
     #user defined
     Key([mod], "i", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
     Key([mod], "o", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
@@ -76,24 +95,25 @@ keys = [
     Key([mod, "control"], "p", lazy.spawn("sh /usr/sbin/rofimusicplayer.sh"), desc="Script Rofi MPC Music player"),
     Key([mod, "shift"], "p", lazy.spawn("alacritty -e rmpc"), desc="Launch Rmpc"),
     Key([mod], "p", lazy.spawn("sh /usr/sbin/rofirmpchud.sh"), desc="Script Rofi rmpc HUD"),
-    Key([mod], "u", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
+    Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
 ]
 
 ##LAYOUTS
 
 layout_conf = {
-    'border_focus': colors['focus'][0],
+    'border_focus': colors['color1'][0],
     'border_width': 2,
     'margin': 0,
 }
 
 layouts = [
+    layout.RatioTile(**layout_conf),
     layout.Columns(**layout_conf),
     layout.Max(),
-    layout.RatioTile(**layout_conf),
     layout.Tile(**layout_conf),
 ]
 
+##WIDGETS
 widget_defaults = dict(
     font="sans",
     fontsize=14,
@@ -102,50 +122,73 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+widget_list = [
+    widget.CurrentLayout(
+		background=colors['color3'][0],),
+    widget.Prompt(
+		background=colors['color2'][0],),
+    widget.GroupBox(
+        background=colors['active'][0],
+        foreground=colors['color1'][0],
+        inactive=colors['dark'][0],
+        active=colors['text'][0],
+        highlight_method='text',),
+	widget.GenPollCommand(
+		background=colors['inactive'][0],
+		cmd='song="$(mpc current)"; if [ "$song" ]; then echo "$song"; else echo No Song; fi',
+		fmt="> {}",
+		shell=True,
+		update_interval=2,),
+    widget.Chord(
+
+        chords_colors={
+            "launch": (colors['dark'][0], colors['text'][0]),
+        },
+        background=colors['color1'][0],
+    ),
+    widget.WindowName(
+	    background=colors['dark'][0],),
+	widget.Clipboard(
+		background=colors['color2'][0],),
+    widget.TextBox(
+		"la seine", 
+		name="noah", 
+		background=colors['color1'][0],),
+    widget.Systray(background=colors['color3'][0]),
+    widget.Clock(
+		format="%Y-%m-%d %a %I:%M %p",
+		background=colors['inactive'][0]),
+    widget.QuickExit(
+		background=colors['active'][0],
+		default_text='[X]'),
+]
+
+##GROUPS
+
+groups = [
+    Group(name='a'),
+    Group(name='z'),
+    Group(name='e'),
+    Group(name='r'),
+    Group(name='t'),
+]
+
+##SCREENS
 screens = [
     Screen(
         top=bar.Bar(
-            [
-                widget.CurrentLayout(
-			background=colors['color3'][0],),
-                widget.Prompt(
-			background=colors['color2'][0],),
-		widget.GenPollCommand(
-			background=colors['inactive'][0],
-			cmd='song="$(mpc current)"; if [ "$song" ]; then echo "$song"; else echo No Song; fi',
-			fmt="> {}",
-			shell=True,
-			update_interval=2,),
-                widget.WindowName(
-			background=colors['dark'][0],),
-                widget.Chord(
-                    chords_colors={
-                        "launch": (colors['dark'][0], colors['text'][0]),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-		widget.Clipboard(
-			background=colors['color2'][0],),
-                widget.TextBox(
-			"la seine", 
-			name="noah", 
-			background=colors['color1'][0],),
-                widget.Systray(background=colors['color3'][0]),
-                widget.Clock(
-			format="%Y-%m-%d %a %I:%M %p",
-			background=colors['inactive'][0]),
-                widget.QuickExit(
-			background=colors['active'][0],
-			default_text='[X]'),
-            ],
+            widget_list,
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
         background=colors['grey'][0],
+        wallpaper=bg,
+        wallpaper_mode="center",
     ),
 ]
 
+##OPTIONS
 # Instead of screens, you can define a function here to specify which Screen
 # should correspond to which Output.
 fake_screens: list[Screen] | None = None
@@ -156,6 +199,7 @@ fake_screens: list[Screen] | None = None
 # in exactly what do render in each bar for each screen.
 generate_screens: Callable[[list[Output]], list[Screen]] | None = None
 
+##FLOATING LAYOUT BEHAVIOUR
 # Drag floating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
@@ -163,12 +207,12 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
-dgroups_key_binder = None
+##GENERAL
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
 bring_front_click = False
 floats_kept_above = True
-cursor_warp = False
+cursor_warp = True
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -181,35 +225,21 @@ floating_layout = layout.Floating(
         Match(title="pinentry"),  # GPG key password entry
     ]
 )
+
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 focus_previous_on_window_remove = False
 reconfigure_screens = True
-
 # How long (in seconds) to wait after a screen change event before firing the
 # screen_change hook, coalescing bursts of events into a single one.
 screen_change_debounce_timeout = 1
-
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
 auto_minimize = True
-
-# When using the Wayland backend, this can be used to configure input devices.
-wl_input_rules = None
-
 # xcursor theme (string or None) and size (integer) for Wayland backend
 wl_xcursor_theme = None
 wl_xcursor_size = 24
 
 idle_timers = []  # type: list
 idle_inhibitors = []  # type: list
-
-# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
-# string besides java UI toolkits; you can see several discussions on the
-# mailing lists, GitHub issues, and other WM documentation that suggest setting
-# this string if your java app doesn't work correctly. We may as well just lie
-# and say that we're a working one by default.
-#
-# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
-# java that happens to be on java's whitelist.
 wmname = "LG3D"
