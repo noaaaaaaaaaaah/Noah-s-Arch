@@ -67,23 +67,25 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     
+    ##GROUP KEYPAD BIND
+    Key([mod], "ampersand", lazy.group["1"].toscreen()),
+    Key([mod], "eacute", lazy.group["2"].toscreen()),
+    Key([mod], "quotedbl", lazy.group["3"].toscreen()),
+    Key([mod], "apostrophe", lazy.group["4"].toscreen()),
+    Key([mod], "parenleft", lazy.group["5"].toscreen()),
+    
+    Key([mod, "Shift"], "ampersand", lazy.window.togroup("1")),
+    Key([mod, "Shift"], "eacute", lazy.window.togroup("2")),
+    Key([mod, "Shift"], "quotedbl", lazy.window.togroup("3")),
+    Key([mod, "Shift"], "apostrophe", lazy.window.togroup("4")),
+    Key([mod, "Shift"], "parenleft", lazy.window.togroup("5")),
+
     ##CHORD
-    KeyChord([mod, "Shift"], "a", [
-        Key([], "a", lazy.group["a"].toscreen()),
-        Key([], "z", lazy.group["z"].toscreen()),
-        Key([], "e", lazy.group["e"].toscreen()),
-        Key([], "r", lazy.group["r"].toscreen()),
-        Key([], "t", lazy.group["t"].toscreen()),
-        
-        Key(["Shift"], "a", lazy.window.togroup("a")),
-        Key(["Shift"], "z", lazy.window.togroup("z")),
-        Key(["Shift"], "e", lazy.window.togroup("e")),
-        Key(["Shift"], "r", lazy.window.togroup("r")),
-        Key(["Shift"], "t", lazy.window.togroup("t")),
-        ],
-        mode=True,
-        name="Group navigation"
-    ),
+    #KeyChord([mod, "Shift"], "a", [
+    #    ],
+    #    mode=True,
+    #    name="Group navigation"
+    #),
 
     #user defined
     Key([mod], "i", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
@@ -166,11 +168,11 @@ widget_list = [
 ##GROUPS
 
 groups = [
-    Group(name='a'),
-    Group(name='z'),
-    Group(name='e'),
-    Group(name='r'),
-    Group(name='t'),
+    Group(name='1'),
+    Group(name='2'),
+    Group(name='3'),
+    Group(name='4'),
+    Group(name='5'),
 ]
 
 ##SCREENS
