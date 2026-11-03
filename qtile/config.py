@@ -8,7 +8,6 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import json
 import subprocess
-from libqtile.dgroups import simple_key_binder
 
 qtile_path = path.join(path.expanduser('~'), ".config", "qtile")
 bg = path.join(qtile_path, "bg_main.jpg")
@@ -44,17 +43,13 @@ keys = [
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
 
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-
+    Key([mod, "shift"], "Return", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
+    Key([mod, "control"], "Return", lazy.spawn("rofi -show run"), desc="Launch Rofi Run"),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
+
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key(
         [mod],
@@ -65,7 +60,6 @@ keys = [
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     
     ##GROUP KEYPAD BIND
     Key([mod], "ampersand", lazy.group["1"].toscreen()),
@@ -88,10 +82,9 @@ keys = [
     #),
 
     #user defined
-    Key([mod], "i", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
-    Key([mod], "o", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
-    Key([mod, "control"], "o", lazy.spawn("rofi -show run"), desc="Launch Rofi Run"),
-    Key([mod], "m", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
+    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "q", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
+    Key([mod], "c", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
     Key([mod, "control"], "p", lazy.spawn("sh /usr/sbin/rofimusicplayer.sh"), desc="Script Rofi MPC Music player"),
@@ -225,6 +218,8 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(title="Qalculate!"),
+        Match(title="LocalSend"),
     ]
 )
 
