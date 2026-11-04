@@ -89,7 +89,7 @@ keys = [
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
     Key([mod, "control"], "p", lazy.spawn("sh /usr/sbin/rofimusicplayer.sh"), desc="Script Rofi MPC Music player"),
     Key([mod, "shift"], "p", lazy.spawn("alacritty -e rmpc"), desc="Launch Rmpc"),
-    Key([mod], "p", lazy.spawn("sh /usr/sbin/rofirmpchud.sh"), desc="Script Rofi rmpc HUD"),
+    Key([mod], "p", lazy.spawn("sh /usr/sbin/rofimpchud.sh"), desc="Script Rofi rmpc HUD"),
     Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
 ]
 
