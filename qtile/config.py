@@ -75,23 +75,27 @@ keys = [
     Key([mod, "Shift"], "parenleft", lazy.window.togroup("5")),
 
     ##CHORD
-    #KeyChord([mod, "Shift"], "a", [
+
+    ##MUSIC PLAYER
+    #KeyChord([mod, "Shift"], "p", [
     #    ],
-    #    mode=True,
+    #    mode=False,
     #    name="Group navigation"
     #),
 
     #user defined
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key([mod], "q", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
+    Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
+    Key([mod], "e", lazy.spawn("nemo"), desc="Launch File Manager"),
     Key([mod], "c", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
+    Key([mod], "q", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
+
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
     Key([mod, "control"], "p", lazy.spawn("sh /usr/sbin/rofimusicplayer.sh"), desc="Script Rofi MPC Music player"),
-    Key([mod, "shift"], "p", lazy.spawn("alacritty -e rmpc"), desc="Launch Rmpc"),
+    Key([mod, "mod1"], "p", lazy.spawn("alacritty -e rmpc"), desc="Launch Rmpc"),
     Key([mod], "p", lazy.spawn("sh /usr/sbin/rofimpchud.sh"), desc="Script Rofi rmpc HUD"),
-    Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
-]
+    ]
 
 ##LAYOUTS
 

@@ -26,7 +26,13 @@ fuzzy () { \
   mpc add "$FUZZY"; mpc play
 }
 
-case $(echo "Fuzzy|Sorted" | rofi -sep "|"  -dmenu -i -p "Select search engine" -lines 2) in
+queue () { \
+  GOTO="$(mpc playlist | rofi -dmenu -format i)" || exit 0
+  mpc play $(expr $GOTO + 1)
+}
+
+case $(echo "Queue|Fuzzy|Sorted" | rofi -sep "|"  -dmenu -i -p "Select search engine" -lines 3) in
+	Queue) queue ;;
 	Fuzzy) fuzzy ;;
 	Sorted) sorted ;;
 	*) exit 0 ;;
