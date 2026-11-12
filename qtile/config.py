@@ -47,8 +47,8 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod, "shift"], "Return", lazy.spawn("rofi -show drun"), desc="Launch Rofi DRun"),
     Key([mod, "control"], "Return", lazy.spawn("rofi -show run"), desc="Launch Rofi Run"),
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
+    Key([mod, "control"], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod, "shift", "control"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
 
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key(
@@ -60,6 +60,9 @@ keys = [
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod, "control"], "Tab", lazy.next_layout(), desc="Next layout"),
+    Key([mod, "control", "shift"], "Tab", lazy.prev_layout(), desc="Previous layout"),
+
     
     ##GROUP KEYPAD BIND
     Key([mod], "ampersand", lazy.group["1"].toscreen()),
@@ -73,6 +76,12 @@ keys = [
     Key([mod, "Shift"], "quotedbl", lazy.window.togroup("3")),
     Key([mod, "Shift"], "apostrophe", lazy.window.togroup("4")),
     Key([mod, "Shift"], "parenleft", lazy.window.togroup("5")),
+
+    Key([mod], "Tab", lazy.screen.next_group(), desc="Switch to next group"),
+    Key([mod, "shift"], "Tab", lazy.screen.prev_group(), desc="Switch to previous group"),
+    Key(["mod1"], "Tab", lazy.screen.toggle_group(), desc="Basculer vers le dernier groupe visité"),
+
+
 
     ##CHORD
 
@@ -88,12 +97,11 @@ keys = [
     Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
     Key([mod], "e", lazy.spawn("nemo"), desc="Launch File Manager"),
     Key([mod], "c", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
-    Key([mod], "q", lazy.spawn("firefox-esr"), desc="Launch Firefox"),
+    Key([mod], "q", lazy.spawn("firefox"), desc="Launch Firefox"),
 
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
     Key([mod, "control"], "p", lazy.spawn("sh /usr/sbin/rofimusicplayer.sh"), desc="Script Rofi MPC Music player"),
-    Key([mod, "mod1"], "p", lazy.spawn("alacritty -e rmpc"), desc="Launch Rmpc"),
     Key([mod], "p", lazy.spawn("sh /usr/sbin/rofimpchud.sh"), desc="Script Rofi rmpc HUD"),
     ]
 
@@ -106,6 +114,7 @@ layout_conf = {
 }
 
 layouts = [
+    layout.MonadTall(**layout_conf),
     layout.RatioTile(**layout_conf),
     layout.Columns(**layout_conf),
     layout.Max(),
