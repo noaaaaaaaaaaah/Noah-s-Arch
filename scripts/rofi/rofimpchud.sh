@@ -1,11 +1,14 @@
 #!/bin/sh
 
-DMENU_RAN=$(if [ $(mpc status %random%) = 'on' ]; then echo "3"; else echo ''; fi)
-DMENU_LOOP=$(if [ $(mpc status %repeat%) = 'on' ]; then echo "4"; else echo ''; fi)
-DMENU_VOL=$(mpc volume)
-MPC_CURRENT=$(mpc current --format '%file%')
-IS_CURRENT_LIKE=''
-mpc -f '%file%' playlist Likes | grep -Fxq -- "$MPC_CURRENT" && IS_CURRENT_LIKE=8
+startup () {
+	DMENU_RAN=$(if [ $(mpc status %random%) = 'on' ]; then echo "3"; else echo ''; fi)
+	DMENU_LOOP=$(if [ $(mpc status %repeat%) = 'on' ]; then echo "4"; else echo ''; fi)
+	DMENU_VOL=$(mpc volume)
+	MPC_CURRENT=$(mpc current --format '%file%')
+	IS_CURRENT_LIKE=''
+	mpc -f '%file%' playlist Likes | grep -Fxq -- "$MPC_CURRENT" && IS_CURRENT_LIKE=8
+	hud
+}
 
 confirm () {
         CONFIRMATION="$(echo "No|Yes|Back" | rofi -sep "|" -dmenu -u 1 -i -l 3  -p "Confirm")" || exit 0
@@ -22,17 +25,17 @@ hud () {
 
         case "$CHOICE" in
                 "") exit 0 ;;
-                Play/Pause) mpc toggle ;;
-		Random) mpc random ;;
-                Next) mpc next ;;
-                Previous) mpc prev ;;
+                Play/Pause) mpc toggle | startup ;;
+		Random) mpc random | startup ;;
+                Next) mpc next | startup ;;
+                Previous) mpc prev | startup ;;
                 Mute) mpc volume 0 ;;
                 Clear) confirm ;;
-		Update) mpc update ;;
-		Loop) mpc repeat ;;
+		Update) mpc update | startup ;;
+		Loop) mpc repeat | startup ;;
 		Like) f=$(mpc current --format '%file%'); [ -z "$f" ] && exit 0; p=$(mpc -f '%file%' playlist Likes | awk -v f="$f" '$0==f {print NR; exit}'); if [ -n "$p" ]; then mpc delplaylist Likes "$p"; else mpc addplaylist Likes "$f"; fi ;;
                 *) mpc volume $CHOICE ;;
         esac
 }
 
-hud
+startup
