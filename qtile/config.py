@@ -96,8 +96,10 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod], "a", lazy.spawn("rofi -show window"), desc="Launch Rofi Window"),
     Key([mod], "e", lazy.spawn("nemo"), desc="Launch File Manager"),
-    Key([mod], "c", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
+    Key([mod], "c", lazy.spawn("alacritty -e nmtui"), desc="Launch Network Manager"),
+    Key([mod], "m", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
     Key([mod], "q", lazy.spawn("firefox"), desc="Launch Firefox"),
+    
 
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),
