@@ -34,7 +34,7 @@ queue () { \
 
 likes () { \
   CHOICE=$(
-	echo "$(mpc playlist Likes)" | rofi -sep "|" -dmenu -i -p "Likes" -lines 15
+	echo "$(mpc playlist Likes)" | rofi -dmenu -i -p "Likes" -lines 15
   )
   case $CHOICE in
 	"") exit 0 ;;
@@ -45,7 +45,7 @@ likes () { \
 
 case $(echo "Queue|Likes|Fuzzy|Sorted" | rofi -sep "|"  -dmenu -i -p "Select search engine" -lines 4) in
 	Queue) queue ;;
-  Likes) likes ;;
+	Likes) likes ;;
 	Fuzzy) fuzzy ;;
 	Sorted) sorted ;;
 	*) exit 0 ;;

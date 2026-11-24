@@ -99,7 +99,6 @@ keys = [
     Key([mod], "c", lazy.spawn("alacritty -e nmtui"), desc="Launch Network Manager"),
     Key([mod], "m", lazy.spawn("alacritty -e mc"), desc="Launch Midnight Commander"),
     Key([mod], "q", lazy.spawn("firefox"), desc="Launch Firefox"),
-    
 
     Key([mod], "s", lazy.spawn("sh /usr/sbin/rofipowermenu.sh"), desc="Script Rofi Power Menu"),
     Key([mod], "n", lazy.spawn("sh /usr/sbin/rofinotes.sh"), desc="Script Rofi Notes"),

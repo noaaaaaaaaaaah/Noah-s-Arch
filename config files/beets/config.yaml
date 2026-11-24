@@ -1,0 +1,5 @@
+directory: ~/Music
+import:
+    log: ~/.config/beets/log.txt
+paths:
+    default: $albumartist/[$year] $album/$track $title
