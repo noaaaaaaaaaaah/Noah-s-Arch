@@ -84,7 +84,7 @@ confirm () {
 
 hud () {
 	
-        CHOICE="$(echo "Play/Pause|Next|Previous|Random|Loop|Mute|Clear|Update|Likes|Library" | 
+        CHOICE="$(echo "Play/Pause|Next|Previous|Random|Loop|Mute|Clear|Update|Like|Library" | 
 		rofi -sep "|" -dmenu -i -a 0:3 -u $DMENU_RAN,$DMENU_LOOP,$IS_CURRENT_LIKE -l 11 -mesg "${mesg}" -p  "Choose action or enter a value to set volume (0-100, currently $DMENU_VOL)")"
         case "$CHOICE" in
                 "") exit 0 ;;
@@ -97,7 +97,7 @@ hud () {
                 Clear) confirm ;;
 		Update) mpc update | startup ;;
 		Loop) mpc repeat | startup ;;
-		Like) f=$(mpc current --format '%file%'); [ -z "$f" ] && exit 0; p=$(mpc -f '%file%' playlist Likes | awk -v f="$f" '$0==f {print NR; exit}'); if [ -n "$p" ]; then mpc delplaylist Likes "$p"; else mpc addplaylist Likes "$f"; fi | startup;;
+		Like) f=$(mpc current --format '%file%'); [ -z "$f" ] && exit 0; p=$(mpc -f '%file%' playlist Likes | awk -v f="$f" '$0==f {print NR; exit}'); if [ -n "$p" ]; then mpc delplaylist Likes "$p"; else mpc addplaylist Likes "$f"; fi | startup ;;
                 *) mpc volume $CHOICE ;;
         esac
 }
